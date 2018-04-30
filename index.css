@@ -1,0 +1,11 @@
+body {
+    background-color: #000;
+}
+
+#root {
+    color: #fff;
+    position: absolute;
+    left: 25%;
+    top: 45%;
+    font-size: 60px;
+}
