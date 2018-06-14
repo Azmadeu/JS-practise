@@ -141,22 +141,22 @@ Object.defineProperty(user, "fullName", {
 });
 
 user.fullName = "Василий Дятлов";
-console.log(user.firstName + " " + user.surName);
+console.log("fullname: " + user.fullName);
 user.surName = "Пупкин";
 console.log("surname change: " + user.surName);
-console.log(user.firstName + " " + user.surName);
+console.log("fullname: " + user.fullName);
 
 function Article() {
     this.created = new Date();
     Article.count++;
     Article.last = this.created;
+
+    Article.showStats = function () {
+        return this.last + " Всего: " + Article.count;
+    };
 }
 
 Article.count = 0;
-
-Article.showStats = function () {
-    return this.last + " Всего: " + Article.count;
-};
 
 console.log(new Article());
 console.log(Article.showStats());
@@ -178,3 +178,60 @@ function mulArgs() {
 
 console.log("call: " + sumArgs(1, 2, 3));
 console.log("call: " + mulArgs(2, 5, 10));
+
+function applyAll(func) {
+    return func.apply(this, [].slice.call(arguments, 1));
+}
+
+console.log("func + args, max: " + applyAll(Math.max, 2, -2, 3));
+console.log("func + args, min: " + applyAll(Math.min, 2, -2, 3));
+
+// var user = {
+//     login: 'Василий',
+//     password: '12345',
+//     loginDone: function (result) {
+//         alert(this.login + (result ? ' вошёл в сайт' : ' ошибка входа'));
+//     },
+//     checkPassword: function () {
+//         ask("Ваш пароль?", this.password,
+//             function () {
+//                 user.loginDone(true);
+//             },
+//             function () {
+//                 user.loginDone(false);
+//             }
+//         );
+//     }
+// };
+
+function ask(question, answer, ok, fail) {
+    var result = prompt(question, '');
+    if (result.toLowerCase() == answer.toLowerCase()) ok();
+    else fail();
+}
+
+var user = {
+    login: "Сергей",
+    password: '12345',
+    loginOk: function () {
+        alert('Добро пожаловать!');
+    },
+    loginFail: function () {
+        alert('Ошибка входа!');
+    },
+    checkPassword: function () {
+        ask("Ваш пароль?", this.password, this.loginOk.bind(this), this.loginFail.bind(this));
+    }
+};
+
+
+var serge = user;
+user = null;
+serge.checkPassword();
+
+var fibonacci = function f(n) {
+    return (n > 2) ? f(n - 1) + f(n - 2) : 1;
+};
+
+console.log(fibonacci(10));
+
